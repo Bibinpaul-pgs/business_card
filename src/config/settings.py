@@ -153,5 +153,5 @@ EMAIL_HOST = 'smtp-relay.brevo.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = '878322001@smtp-brevo.com'
-EMAIL_HOST_PASSWORD = 'gFn3WxwYN6dQ4AIk'  # Ensure this is pulled securely from environment variables
+EMAIL_HOST_PASSWORD = ''  # Ensure this is pulled securely from environment variables
 DEFAULT_FROM_EMAIL = 'noreply@businesscard.in'
