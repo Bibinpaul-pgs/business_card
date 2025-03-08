@@ -2,11 +2,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from cards.views import CardViewSet
+from cards.views import CardViewSet, CardFileViewSet, CardRequestViewSet
 # django rest framework
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
+router.register('cards/file', CardFileViewSet, 'cards-file')
+router.register('cards/request', CardRequestViewSet, 'cards-requests')
 router.register('cards', CardViewSet, 'cards')
 
 urlpatterns = [
