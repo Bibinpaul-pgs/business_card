@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'core',
     'users',
     'contrib',
+    'cards',
 ]
 
 MIDDLEWARE = [
@@ -144,3 +145,13 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp-relay.brevo.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = '878322001@smtp-brevo.com'
+EMAIL_HOST_PASSWORD = 'gFn3WxwYN6dQ4AIk'  # Ensure this is pulled securely from environment variables
+DEFAULT_FROM_EMAIL = 'noreply@businesscard.in'
