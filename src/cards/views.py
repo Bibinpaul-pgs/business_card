@@ -15,6 +15,7 @@ class CardViewSet(viewsets.ModelViewSet):
     filterset_fields = ['created_by', 'card_type']
     search_fields = ['full_name', 'company_name']
     ordering_fields = ['created_at', ]
+    
 
     @action(methods=['get'], detail=False)
     def me(self, request, pk=None):
@@ -36,7 +37,6 @@ class CardViewSet(viewsets.ModelViewSet):
         card_requests = CardRequest.objects.filter(is_accepted=False)
         serializer = CardRequestSerializer(card_requests, many=True)
         return Response({"data": card_requests.data})
-
 
 
 

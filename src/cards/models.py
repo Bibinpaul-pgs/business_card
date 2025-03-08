@@ -8,8 +8,15 @@ class CardKind(models.IntegerChoices):
     PRIVATE = 2
 
 
-class Card(BaseModel):
+class CardFile(BaseModel):
     file = models.FileField(upload_to="cards/file")
+
+    def __str__(self):
+        return str(self.id)
+
+
+class Card(BaseModel):
+    file = models.ForeignKey(CardFile, on_delete=models.CASCADE, related_name='card')
     profile_image = models.FileField(upload_to="cards/profile_image", null=True, blank=True)
     full_name = models.CharField(max_length=300, null=True, blank=True)
     designation = models.CharField(max_length=300, null=True, blank=True)
