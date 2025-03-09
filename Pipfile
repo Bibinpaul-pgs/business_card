@@ -13,7 +13,6 @@ django-extensions = "*"
 gunicorn = "*"
 ipython = "*"
 psycopg2-binary = "*"
-djoser = "*"
 drf-spectacular = "*"
 requests = "*"
 resend = "*"
@@ -29,6 +28,9 @@ pytest-django = "*"
 pytest-factoryboy = "*"
 watchfiles = "*"
 ruff = "*"
+firebase-admin = "*"
+django-phonenumber-field = {extras = ["phonenumbers"], version = "*"}
+djoser = "*"
 
 [dev-packages]
 yapf = "*"

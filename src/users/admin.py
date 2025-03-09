@@ -5,6 +5,6 @@ from django.contrib import admin
 from .models import User
 
 
-@admin.register(User)
-class UserAdmin(BaseUserAdmin):
-    """ user admin """
+admin.site.register(User)
+# class UserAdmin(BaseUserAdmin):
+#     """ user admin """

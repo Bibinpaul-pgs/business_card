@@ -14,6 +14,9 @@ router.register('cards', CardViewSet, 'cards')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('api/', include('users.urls')),
+    path('fire/', include('firebase.urls')),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
