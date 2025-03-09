@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Card, CardRequest, CardFile, CardKind
+from .models import Card, CardRequest, CardFile, CardKind, MyHolder
+from users.serializers import UserSerializer
 
 class CardFileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,6 +36,7 @@ class CardSerializer(serializers.ModelSerializer):
 class CardListSerializer(serializers.ModelSerializer):
     card_type = serializers.CharField(source='get_card_type_display')
     can_access = serializers.SerializerMethodField()
+    created_by = UserSerializer()
     
     class Meta:
         model = Card
@@ -86,9 +88,23 @@ class CardRequestSerializer(serializers.ModelSerializer):
 
 class CardRequestListSerializer(serializers.ModelSerializer):
     card = CardSerializer()
+    requested_by = UserSerializer()
 
     class Meta:
         model = CardRequest
         fields = ['id', 'requested_by', 'card', 'is_accepted']
         read_only_fields = ['requested_by'] 
     
+
+
+class MyHolderCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MyHolder
+        fields = ['user', 'card']
+    
+class MyHolderSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    card = CardListSerializer()
+    class Meta:
+        model = MyHolder
+        fields = ['user', 'card']

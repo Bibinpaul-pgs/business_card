@@ -51,3 +51,10 @@ class CardRequest(BaseModel):
         ]
 
     
+
+class MyHolder(BaseModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='my_holder')
+    card = models.ForeignKey(Card, on_delete=models.CASCADE, related_name='my_holder')
+
+    def __str__(self):
+        return str(self.id)
