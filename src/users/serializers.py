@@ -42,3 +42,23 @@ class UserModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["email", "display_name"]
+
+
+class UserProfileSerializer(serializers.Serializer):
+    profile_image = serializers.ImageField()
+    full_name = serializers.CharField()
+    designation = serializers.CharField()
+    company_name = serializers.CharField()
+    phone_number = serializers.CharField()
+    email = serializers.CharField()
+    location_details = serializers.CharField()
+    social_media_links = serializers.JSONField()
+
+    def to_representation(self, instance):
+        request = self.context.get('request')
+        data = super().to_representation(instance)
+
+        if instance.profile_image and request is not None:
+            data['profile_image'] = request.build_absolute_uri(instance.profile_image.url)
+
+        return data

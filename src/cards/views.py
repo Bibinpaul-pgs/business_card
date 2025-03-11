@@ -73,6 +73,6 @@ class MyHolderViewSet(viewsets.ModelViewSet):
     serializer_class = MyHolderSerializer
 
     def get_serializer_class(self):
-        if self.action == 'created' or self.action == 'update':
+        if self.action == 'create' or self.action == 'update' or self.action == 'partial_update':
             return MyHolderCreateSerializer
         return super().get_serializer_class()

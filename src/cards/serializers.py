@@ -12,6 +12,9 @@ class CardSerializer(serializers.ModelSerializer):
     def validate(self, data):
         request = self.context.get("request")
         user = request.user
+        data = super().validate(data)
+        if Card.objects.filter(created_by=user).count() >= 3:
+            raise serializers.ValidationError("Card limit reached")
         print("user = ",user)
         data["created_by"] = user
         return data
@@ -71,7 +74,7 @@ class CardRequestSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
         user = request.user
         print("user =", user)
-
+        data = super().validate(data)
         # Assign the requested_by field
         data["requested_by"] = user
 
@@ -98,9 +101,30 @@ class CardRequestListSerializer(serializers.ModelSerializer):
 
 
 class MyHolderCreateSerializer(serializers.ModelSerializer):
+    def validate(self, data):
+        request = self.context.get("request")
+        user = request.user
+        print("user =", user)
+        data = super().validate(data)
+        # Assign the requested_by field
+        data["user"] = user
+        print("data = ",data["card"])
+        card = data["card"]
+        if not card:
+            raise serializers.ValidationError("Card not exist")
+        
+        if not card.card_type == CardKind.PUBLIC and not CardRequest.objects.filter(requested_by=request.user, card=card, is_accepted=True).exists():
+            raise serializers.ValidationError("You need to request this card first")
+
+
+        if MyHolder.objects.filter(**data).exists():
+            raise serializers.ValidationError("This card already saved")
+
+        return data
     class Meta:
         model = MyHolder
         fields = ['user', 'card']
+        extra_kwargs = {'user': {'required': False}}
     
 class MyHolderSerializer(serializers.ModelSerializer):
     user = UserSerializer()

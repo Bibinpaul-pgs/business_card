@@ -3,6 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from cards.views import CardViewSet, CardFileViewSet, CardRequestViewSet, MyHolderViewSet
+from users.views import UserViewSet
 # django rest framework
 from rest_framework.routers import DefaultRouter
 
@@ -11,6 +12,7 @@ router.register('cards/file', CardFileViewSet, 'cards-file')
 router.register('cards/request', CardRequestViewSet, 'cards-requests')
 router.register('cards/my-holder', MyHolderViewSet, 'cards-my-holder')
 router.register('cards', CardViewSet, 'cards')
+router.register('profile', UserViewSet, basename='user-profile')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
