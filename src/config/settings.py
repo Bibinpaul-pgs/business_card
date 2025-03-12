@@ -227,7 +227,7 @@ DJOSER = {
     'LOGIN_FIELD': 'email',
     'USER_CREATE_PASSWORD_RETYPE': False,
     'ACTIVATION_URL': 'activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': True,
+    'SEND_ACTIVATION_EMAIL': False,
 
     'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
     'EMAIL_FRONTEND_DOMAIN': 'purchase-finance.vercel.app',

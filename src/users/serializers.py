@@ -10,8 +10,14 @@ from django.db import transaction
 from djoser.serializers import (
     UserCreateSerializer as BaseUserCreateSerializer,
     UserSerializer as BaseUserSerializer,
+    
 )
 
+
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+from django.contrib.auth import authenticate
 
 # local
 from .models import User
@@ -44,6 +50,23 @@ class UserModelSerializer(serializers.ModelSerializer):
         fields = ["email", "display_name"]
 
 
+class TokenObtainSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        refresh = self.get_token(self.user)
+
+        if not self.user.is_verified:
+            raise serializers.ValidationError("Your account is not verified. Please verify before logging in.")
+
+        data["refresh"] = str(refresh)
+        data["access"] = str(refresh.access_token)
+
+        return data
+
+class CutomObtainPairView(TokenObtainPairView):
+    serializer_class = TokenObtainSerializer
+
+
 class UserProfileSerializer(serializers.Serializer):
     profile_image = serializers.ImageField()
     full_name = serializers.CharField()
@@ -62,3 +85,8 @@ class UserProfileSerializer(serializers.Serializer):
             data['profile_image'] = request.build_absolute_uri(instance.profile_image.url)
 
         return data
+    
+
+class VerifyOtpSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    otp = serializers.IntegerField()
