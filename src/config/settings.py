@@ -188,28 +188,7 @@ SITE_ID = 1
 import json
 # firebase config
 FIREBASE_CONFIG = {
-    'FIREBASE_SERVICE_ACCOUNT': json.dumps({
-        "type": "",
-        "project_id": "",
-        "private_key_id": "",
-        "private_key": "",
-        "client_email": "",
-        "client_id": "",
-        "auth_uri": "",
-        "token_uri": "",
-        "auth_provider_x509_cert_url": "",
-        "client_x509_cert_url": "",
-        "universe_domain": ""
-    }),
-    "FIREBASE_WEBAPP_CONFIG":json.dumps({
-        "apiKey": "",
-        "authDomain": "",
-        "projectId": "",
-        "storageBucket": "",
-        "messagingSenderId": "",
-        "appId": "",
-        "measurementId": ""
-    })
+    'FIREBASE_SERVICE_ACCOUNT': env('FIREBASE_SERVICE_ACCOUNT')
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
