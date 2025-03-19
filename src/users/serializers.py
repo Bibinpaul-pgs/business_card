@@ -37,10 +37,11 @@ class UserCreateSerializer(BaseUserCreateSerializer):
 
 class UserSerializer(BaseUserSerializer):
     tokens = serializers.SerializerMethodField()
+    # profile_id = 
 
     class Meta:
         model = User
-        fields = ("uid", "email", "display_name", "tokens")
+        fields = ("uid", "email", "display_name", "tokens", 'user_profile')
         read_only_fields = ['uid']
 
     def get_tokens(self, instance):
