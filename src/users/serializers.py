@@ -16,11 +16,11 @@ from djoser.serializers import (
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-
+from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 
 # local
-from .models import User
+from .models import User, UserProfile
 import uuid
 
 
@@ -36,11 +36,27 @@ class UserCreateSerializer(BaseUserCreateSerializer):
 
 
 class UserSerializer(BaseUserSerializer):
+    tokens = serializers.SerializerMethodField()
 
-    class Meta(BaseUserSerializer.Meta):
+    class Meta:
         model = User
-        fields = ("uid", "email", "display_name")
+        fields = ("uid", "email", "display_name", "tokens")
         read_only_fields = ['uid']
+
+    def get_tokens(self, instance):
+        """ Generate JWT token for the user """
+        print("instance = ", instance)
+        
+        refresh = RefreshToken.for_user(instance)
+
+        if not instance.is_verified:  # Assuming `instance` has `is_verified`
+            raise serializers.ValidationError("Your account is not verified. Please verify before logging in.")
+        
+        data = {
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
+        }
+        return data
 
 
 class UserModelSerializer(serializers.ModelSerializer):
@@ -90,3 +106,20 @@ class UserProfileSerializer(serializers.Serializer):
 class VerifyOtpSerializer(serializers.Serializer):
     email = serializers.EmailField()
     otp = serializers.IntegerField()
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    class Meta:
+        model = UserProfile
+        fields = [
+            'id',
+            'user',
+            'profile_image',
+            'full_name',
+            'designation',
+            'company_name',
+            'phone_number',
+            'email',
+            'location_details',
+        ]

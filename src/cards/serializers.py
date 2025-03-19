@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from .models import Card, CardRequest, CardFile, CardKind, MyHolder
 from users.serializers import UserSerializer
+from django.db import transaction
+from users.models import UserProfile
 
 class CardFileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,6 +37,23 @@ class CardSerializer(serializers.ModelSerializer):
             "social_media_links",
             "created_by",
         ]
+
+    @transaction.atomic
+    def create(self, validated_data):
+        request = self.context['request']
+        card = super().create(validated_data)
+        if not UserProfile.objects.filter(user=request.user).exists():
+            UserProfile.objects.create(
+                user=request.user,
+                profile_image=validated_data.get('profile_image'),
+                full_name = validated_data.get('full_name'),
+                designation = validated_data.get('designation'),
+                company_name = validated_data.get('company_name'),
+                phone_number = validated_data.get('phone_number'),
+                email = validated_data.get('email'),
+                location_details = validated_data.get('location_details')
+            )
+        return card
 
 class CardListSerializer(serializers.ModelSerializer):
     card_type = serializers.CharField(source='get_card_type_display')

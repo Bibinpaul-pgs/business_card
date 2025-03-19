@@ -1,21 +1,19 @@
-from rest_framework.viewsets import ViewSet
+from rest_framework.viewsets import ViewSet,ModelViewSet
 from cards.models import Card
 from rest_framework.exceptions import ValidationError
 
 from users.serializers import UserProfileSerializer, VerifyOtpSerializer
 from rest_framework.response import Response
-from .models import User
+from .models import User, UserProfile
 from rest_framework.permissions import AllowAny
 
-class UserViewSet(ViewSet):
-    def list(self, request):
-        user = request.user
-        card = Card.objects.filter(created_by=user).order_by('created_by').first()
-        if not card:
-            raise ValidationError("Please add a card first")
-        serializer = UserProfileSerializer(card, context={'request': request})
+class UserViewSet(ModelViewSet):
+    queryset = UserProfile.objects.filter()
+    serializer_class = UserProfileSerializer
 
-        return Response({"data": serializer.data})
+    def get_queryset(self):
+        queryset = UserProfile.objects.filter(user=self.request.user)
+        return queryset
 
 class VerifyOtpViewSet(ViewSet):
     permission_classes = [AllowAny]
